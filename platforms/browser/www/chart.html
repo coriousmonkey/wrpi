@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/sidenav.css" />
+    <title></title>
+   <!-- <script type="text/javascript" src="cordova.js"></script> -->
+    <script type="text/javascript" src="js/jquery-1.12.3.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="canvas/canvasjs.min.js"></script>
+    <script type="text/javascript" src="js/sidenav.js"></script>
+<script>
+var new_datapoint=[];
+    var dmy=new Date();
+    var tsts=  dmy.getFullYear() + "-" + zeroPad((dmy.getMonth()+1),2 ) + "-" +zeroPad( (dmy.getDate()+0),2 );
+    var http_err=[];
+    
+function zeroPad(num, places) {
+  var zero = places - num.toString().length + 1;
+  return Array(+(zero > 0 && zero)).join("0") + num;
+}
+    
+window.onload = function () {
+
+    $.ajax({
+                        type: "GET",
+                        url:  "http://"+$('#host').val()+"/wildan/index.php/Http_h/?date="+tsts+"&user="+$('#user').val()+"&pass="+$('#pass').val(),
+                        dataType:"json",
+                        crossDomain:true,
+                        success: function (databaru) {
+                            $('#last_data').val(databaru['y']);
+                            var chart = new CanvasJS.Chart("chartContainer", { 
+                                                		title: {
+                                                			text: "Kelembapan"
+                                                		},
+                                                        axisY:{
+                                                           maximum: 120,
+                                                         },
+                                                		data: [
+                                                		{
+                                                			type: "line",
+                                                			dataPoints: [
+                                                                { x:new Date( databaru['x'] ),'y': Number (databaru['y']) }
+                                                            ]
+                                                		}
+                                                		]
+                                                	});
+                           	chart.render();
+                            
+                            $('#update').click(function(){
+                               ajax_update(); 
+                            });
+                            
+                            function ajax_update(){
+                                    $.ajax({
+                                                type: "GET",
+                                                url:  "http://"+$('#host').val()+"/wildan/index.php/Http_h/?date="+tsts+"&user="+$('#user').val()+"&pass="+$('#pass').val(),
+                                                dataType:"json",
+                                                crossDomain:true,
+                                                success: function (databaru) {
+                                                    $('#last_data').val(databaru['y']);
+                                                	var length = chart.options.data[0].dataPoints.length;
+                                                	chart.options.title.text = "kelembapan updated";
+                                                	chart.options.data[0].dataPoints.push({ x:new Date( databaru['x'] ),'y': Number (databaru['y']) });
+                                                	chart.render();
+                                                    
+                                                    
+                                                },
+                                                error: function (err) {
+                                                    consile.log('error');
+                                                }
+                                            }); 
+                                }
+                            
+                            
+                        },
+                        error: function (err) {
+                            //consile.log('error');
+                            http_err=err;
+                            alert("cek koneksi atau pass");
+                        }
+                    }); 
+}
+    
+    
+</script>
+</head>
+
+<body>
+    <div class="row">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                  <a onclick="openNav()" id="leftmenubtn" class="navbar-brand" href="#"><span class="glyphicon glyphicon-th"></span></a>
+                  <a class="navbar-brand" style="" href="#">Data</a>
+                </div>  
+            </div>
+        </nav>
+    </div>
+    
+    <div id="mySidenav" class="sidenav">
+      <a style="padding-top: 50px;" href="javascript:void(0)" class="closebtn" onclick="closeNav()"><strong>&times;</strong></a>
+      <a href="login.html">Profile</a>
+      <a href="chart.html">Chart</a>
+      <a href="setting-sensor.html">Setting</a>
+    </div>
+
+<!-- Use any element to open the sidenav -->
+    
+    <div class="row" style="margin-top: 70px;">
+        <div class="col-md-12">
+            <div id="chartContainer" style="width:100%; height:280px"></div> 
+            <center>
+            <button id="update">update</button><br />
+            Kelembapan :<br />
+            <input readonly="" onclick="" type="text" id="last_data" style="font-size:xx-large;background-color: white;" size="5" />
+            <br /><br />
+            Hostname :<br />
+            <input readonly="" type="text" id="host" value="localhost" /><br />
+            <input type="text" id="user" value="wildan" /><br />
+            <input type="text" id="pass" value="wildan" /><br /><br /><br />
+            </center>
+        </div>
+    </div>
+    
+    <div class="row">
+    
+    </div>
+    <script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "100%";
+    }
+    
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+</body>
+
+</html>

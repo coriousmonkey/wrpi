@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" />
+    <title></title>
+    <style>
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 9; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+    </style>
+       <!-- <script type="text/javascript" src="cordova.js"></script> -->
+    <script type="text/javascript" src="js/jquery-1.12.3.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/sidenav.js"></script>
+    <script>
+        
+    </script>
+</head>
+
+<body>
+    <div class="row">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                  <a onclick="openNav()" id="leftmenubtn" class="navbar-brand" href="#"><span class="glyphicon glyphicon-th"></span></a>
+                  <a class="navbar-brand" style="" href="#">Pump On/Off Setting</a>
+                </div>  
+            </div>
+        </nav>
+    </div>
+    
+    <div id="mySidenav" class="sidenav">
+      <a style="padding-top: 50px;" href="javascript:void(0)" class="closebtn" onclick="closeNav()"><strong>&times;</strong></a>
+      <a href="login.html">Profile</a>
+      <a href="chart.html">Chart</a>
+      <a href="setting-sensor.html">Setting</a>
+    </div>
+
+<!-- Use any element to open the sidenav -->
+    
+    <div class="row" style="margin-top: 70px;">
+        <div class="col-md-12">
+            <div style="position: static; width: 70%;margin-left: auto;margin-right: auto;">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">Pump On When <= </span>
+                  <input id="pumpon" type="text" class="form-control" placeholder="Pump On" >
+                </div><br />
+                
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">Pump Off When >= </span>
+                  <input id="pumpoff" type="text" class="form-control" placeholder="Pump Off" >
+                </div><br />
+                
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Keterangan</div>
+                    <div class="panel-body">
+                        <p>Pump On -> Pompa akan menyala saat value sensor melebihi value Pump on yang di set</p>
+                        <p>Pump Off -> Pompa akan mati saat value sensor kurang dari value Pump off </p>
+                    </div>
+                  </div><br />
+                <center>
+                <button class="btn btn-primary">Set</button>
+                <br />Hostname :<br />
+                <input readonly="" type="text" id="host" value="localhost" /><br />
+                <input type="text" id="user" value="wildan" /><br />
+                <input type="text" id="pass" value="wildan" /><br /><br /><br />
+                </center>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+    
+    </div>
+    <script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "100%";
+    }
+    
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+</body>
+
+</html>
