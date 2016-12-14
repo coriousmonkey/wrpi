@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/sidenav.css" />
+    <title></title>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/jquery-1.12.3.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/sidenav.js"></script>
+    <script>
+    $(document).ready(function(){
+        $("#login").click(function(){
+           loggin_telemetri();
+            var user=$('#user').val();
+            var passwd=$('#pass').val();
+            var hostaddr=$('#host').val();
+            window.localStorage.setItem("user", user);
+            window.localStorage.setItem("pass", passwd);
+            window.localStorage.setItem("host",hostaddr);
+        });
+        
+        var user = window.localStorage.getItem("user");
+        var passwd = window.localStorage.getItem("pass");
+        var hostaddres=window.localStorage.getItem("host");
+        console.log(user);
+        console.log(passwd);
+        console.log(hostaddres);
+        $('#user').val(user);
+        $('#pass').val(passwd);
+        $('#host').val(hostaddres);
+        setTimeout(function(){
+            loggin_telemetri();
+        },1000);
+        
+    });
+    
+    function loggin_telemetri(){
+        $.ajax({
+                type: "GET",
+                url:  "http://"+$('#host').val()+"/wildan/index.php/http_login/?&user="+$('#user').val()+"&pass="+$('#pass').val(),
+                dataType:"json",
+                crossDomain:true,
+                success: function (databaru) {
+                        if(databaru['user']==false){
+                            $("#status").html("Unlogged");
+                            $("#status").removeClass('btn-primary').addClass('btn-danger');
+                        }else{
+                            $("#status").html("Logged in"); 
+                            $("#user").val(databaru['user']);  
+                            $("#user").val(databaru['pass']);
+                            $("#status").removeClass('btn-danger').addClass('btn-primary');
+                        }
+                   },
+                   error: function (err) {
+                        alert("koneksi gagal");
+                   }
+            }); 
+    }
+    </script>
+</head>
+
+<body>
+    <div class="row">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                  <a onclick="openNav()" id="leftmenubtn" class="navbar-brand" href="#"><span class="glyphicon glyphicon-th"></span></a>
+                  <a class="navbar-brand" style="" href="#">Profile</a>
+                </div>  
+            </div>
+        </nav>
+    </div>
+    
+    <div id="mySidenav" class="sidenav">
+      <a style="padding-top: 50px;" href="javascript:void(0)" class="closebtn" onclick="closeNav()"><strong>&times;</strong></a>
+      <a href="login.html">Profile</a>
+      <a href="chart.html">Chart</a>
+      <a href="setting-sensor.html">Setting</a>
+    </div>
+
+<!-- Use any element to open the sidenav -->
+    
+    <div class="row" style="margin-top: 70px;">
+        <div class="col-md-12">
+            <div style="position: static; width: 70%;margin-left: auto;margin-right: auto;">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">Server</span>
+                  <input id="host" type="text" class="form-control" value="localhost" placeholder="Server" >
+                </div><br />
+                
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">User</span>
+                  <input id="user" name="user" type="text" class="form-control" placeholder="User" value="wildan" >
+                </div><br />
+                
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">Pass</span>
+                  <input id="pass" name="pass" type="text" class="form-control" placeholder="Pass" value="wildan" >
+                </div><br />
+                <center>
+                <button id="login" class="btn btn-primary">login</button>&nbsp;&nbsp;
+                <button id="logout" class="btn btn-primary">Logout</button><br /><br />
+                <button id="status" class="btn ">Never in</button>
+                </center>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+    
+    </div>
+</body>
+
+</html>
