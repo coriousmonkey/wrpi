@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="css/sidenav.css" />
     <title></title>
-   <!-- <script type="text/javascript" src="cordova.js"></script> -->
+   <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/jquery-1.12.3.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="canvas/canvasjs.min.js"></script>
@@ -25,12 +25,17 @@ function zeroPad(num, places) {
   var zero = places - num.toString().length + 1;
   return Array(+(zero > 0 && zero)).join("0") + num;
 }
-    
-window.onload = function () {
+
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady() {
+ var user = window.localStorage.getItem("user");
+ var passwd = window.localStorage.getItem("pass");
+ var hostaddres=window.localStorage.getItem("host");
 
     $.ajax({
                         type: "GET",
-                        url:  "http://"+$('#host').val()+"/wildan/index.php/Http_h/?date="+tsts+"&user="+$('#user').val()+"&pass="+$('#pass').val(),
+                        url:  "http://"+hostaddres+"/wildan/index.php/Http_h/?date="+tsts+"&user="+user+"&pass="+passwd,
                         dataType:"json",
                         crossDomain:true,
                         success: function (databaru) {
@@ -55,12 +60,13 @@ window.onload = function () {
                             
                             $('#update').click(function(){
                                ajax_update(); 
+                               $('#update').attr('disabled','');
                             });
                             
                             function ajax_update(){
                                     $.ajax({
                                                 type: "GET",
-                                                url:  "http://"+$('#host').val()+"/wildan/index.php/Http_h/?date="+tsts+"&user="+$('#user').val()+"&pass="+$('#pass').val(),
+                                                url:  "http://"+hostaddres+"/wildan/index.php/Http_h/?date="+tsts+"&user="+user+"&pass="+passwd,
                                                 dataType:"json",
                                                 crossDomain:true,
                                                 success: function (databaru) {
@@ -69,8 +75,9 @@ window.onload = function () {
                                                 	chart.options.title.text = "kelembapan updated";
                                                 	chart.options.data[0].dataPoints.push({ x:new Date( databaru['x'] ),'y': Number (databaru['y']) });
                                                 	chart.render();
-                                                    
-                                                    
+                                                    setTimeout(function(){
+                                                        ajax_update();
+                                                    },3000);
                                                 },
                                                 error: function (err) {
                                                     consile.log('error');
@@ -121,10 +128,6 @@ window.onload = function () {
             Kelembapan :<br />
             <input readonly="" onclick="" type="text" id="last_data" style="font-size:xx-large;background-color: white;" size="5" />
             <br /><br />
-            Hostname :<br />
-            <input readonly="" type="text" id="host" value="localhost" /><br />
-            <input type="text" id="user" value="wildan" /><br />
-            <input type="text" id="pass" value="wildan" /><br /><br /><br />
             </center>
         </div>
     </div>
@@ -132,15 +135,6 @@ window.onload = function () {
     <div class="row">
     
     </div>
-    <script>
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "100%";
-    }
-    
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-    </script>
 </body>
 
 </html>

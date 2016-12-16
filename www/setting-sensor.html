@@ -8,55 +8,54 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/sidenav.css" />
     <title></title>
-    <style>
-.sidenav {
-    height: 100%; /* 100% Full-height */
-    width: 0; /* 0 width - change this with JavaScript */
-    position: fixed; /* Stay in place */
-    z-index: 9; /* Stay on top */
-    top: 0;
-    left: 0;
-    background-color: #111; /* Black*/
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 60px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-}
-
-/* The navigation menu links */
-.sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 18px;
-    color: #818181;
-    display: block;
-    transition: 0.3s
-}
-
-/* When you mouse over the navigation links, change their color */
-.sidenav a:hover, .offcanvas a:focus{
-    color: #f1f1f1;
-}
-
-/* Position and style the close button (top right corner) */
-.sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-}
-#main {
-    transition: margin-left .5s;
-    padding: 20px;
-}
-    </style>
-       <!-- <script type="text/javascript" src="cordova.js"></script> -->
+    <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/jquery-1.12.3.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="js/sidenav.js"></script>
     <script>
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        var user = window.localStorage.getItem("user");
+        var passwd = window.localStorage.getItem("pass");
+        var hostaddres=window.localStorage.getItem("host");
+    
+
+        $.ajax({
+             type: "GET",
+             url:  "http://"+hostaddres+"/wildan/index.php/http_setting/?&user="+user+"&pass="+passwd,
+             dataType:"json",
+             crossDomain:true,
+             success: function (databaru) {
+                $('#pumpon').val(databaru['pump_on']); 
+                $('#pumpoff').val( databaru['pump_off'] );
+                console.log(databaru);
+             },
+             error: function (err) {
+                alert("koneksi gagal");
+             }
+        }); 
         
+        $('#setsend').click(function(){
+            http_handler();
+        })
+        
+        function http_handler(){
+            $.ajax({
+                    type: "GET",
+                    url:  "http://"+hostaddres+"/wildan/index.php/http_setting/?&user="+user+"&pass="+passwd+"&pump_on="+$('#pumpon').val()+"&pump_off="+$('#pumpoff').val(),
+                    dataType:"json",
+                    crossDomain:true,
+                    success: function (databaru) {
+                            console.log(databaru);
+                       },
+                       error: function (err) {
+                            alert("koneksi gagal");
+                       }
+                }); 
+        }
+    }
     </script>
 </head>
 
@@ -102,11 +101,7 @@
                     </div>
                   </div><br />
                 <center>
-                <button class="btn btn-primary">Set</button>
-                <br />Hostname :<br />
-                <input readonly="" type="text" id="host" value="localhost" /><br />
-                <input type="text" id="user" value="wildan" /><br />
-                <input type="text" id="pass" value="wildan" /><br /><br /><br />
+                <button id="setsend" class="btn btn-primary">Set</button>
                 </center>
             </div>
         </div>
@@ -115,15 +110,6 @@
     <div class="row">
     
     </div>
-    <script>
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "100%";
-    }
-    
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-    </script>
 </body>
 
 </html>
