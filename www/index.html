@@ -44,7 +44,7 @@
     function loggin_telemetri(){
         $.ajax({
                 type: "GET",
-                url:  "http://"+$('#host').val()+"/wildan/index.php/http_login/?&user="+$('#user').val()+"&pass="+$('#pass').val(),
+                url:  "http://"+$('#host').val()+"/wildan/index.php/http_login/?user="+$('#user').val()+"&pass="+$('#pass').val(),
                 dataType:"json",
                 crossDomain:true,
                 success: function (databaru) {

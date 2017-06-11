@@ -17,6 +17,8 @@
     <script>
     document.addEventListener("deviceready", onDeviceReady, false);
     function onDeviceReady() {
+       // $(document).ready(function(){
+        
         var user = window.localStorage.getItem("user");
         var passwd = window.localStorage.getItem("pass");
         var hostaddres=window.localStorage.getItem("host");
@@ -24,7 +26,7 @@
 
         $.ajax({
              type: "GET",
-             url:  "http://"+hostaddres+"/wildan/index.php/http_setting/?&user="+user+"&pass="+passwd,
+             url:  "http://"+hostaddres+"/wildan/index.php/http_setting/?user="+user+"&pass="+passwd,
              dataType:"json",
              crossDomain:true,
              success: function (databaru) {
@@ -55,6 +57,7 @@
                        }
                 }); 
         }
+    //});
     }
     </script>
 </head>
@@ -96,8 +99,8 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">Keterangan</div>
                     <div class="panel-body">
-                        <p>Pump On -> Pompa akan menyala saat value sensor melebihi value Pump on yang di set</p>
-                        <p>Pump Off -> Pompa akan mati saat value sensor kurang dari value Pump off </p>
+                        <p>Pump On -> Pompa akan menyala saat value sensor kurang dari value Pump on yang di set</p>
+                        <p>Pump Off -> Pompa akan mati saat value sensor lebih dari value Pump off </p>
                     </div>
                   </div><br />
                 <center>
